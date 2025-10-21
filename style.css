@@ -97,18 +97,21 @@ nav {
     display: block;
   }
 
-  .nav-links {
+    .nav-links {
     position: absolute;
     top: 100%;
+    left: 0;
     right: 0;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.98);
     flex-direction: column;
-    width: 220px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    align-items: center;
+    width: 100%;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     display: none;
-    padding: 12px;
-    animation: fadeIn 0.25s ease forwards;
+    padding: 16px 0;
+    animation: slideDown 0.25s ease forwards;
+    backdrop-filter: blur(8px);
   }
 
   .nav-links.open {
@@ -116,8 +119,16 @@ nav {
   }
 
   .nav-links a {
-    padding: 10px 12px;
-    color: #333;
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 1rem;
+    color: #222;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes fadeIn {
@@ -421,5 +432,44 @@ footer {
     width: 46px;
     height: 46px;
     font-size: 1.1rem;
+  }
+}
+/* ===== HIỂN THỊ GÓI CHỤP NGAY DƯỚI ẢNH (CHO MOBILE) ===== */
+@media (max-width: 768px) {
+  .service-card {
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .package-inline {
+    margin-top: 12px;
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    padding: 10px;
+    animation: fadeIn 0.25s ease-in-out;
+  }
+
+  .package-inline .package {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #333;
+  }
+
+  .package-inline .package.selected {
+    background: #00bfa5;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
