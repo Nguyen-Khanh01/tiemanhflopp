@@ -322,3 +322,72 @@ footer{background:#111111;color:#fff;padding:18px;text-align:center;margin-top:4
     font-size: 1.1rem;
   }
 }
+/* ====== MENU MOBILE ====== */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  nav {
+    position: relative;
+  }
+  .menu-toggle {
+    display: block;
+  }
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    display: none;
+    text-align: left;
+    padding: 10px;
+  }
+  .nav-links.open {
+    display: flex;
+  }
+  .nav-links a {
+    color: #333;
+    padding: 10px;
+  }
+  .hero {
+    height: 60vh;
+  }
+}
+
+/* ====== ẢNH TRÊN MOBILE ====== */
+@media (max-width: 600px) {
+  .hero-text h2 {
+    font-size: 1.4rem;
+  }
+  .hero-text p {
+    font-size: 0.9rem;
+  }
+  .service-card {
+    padding: 10px;
+  }
+  .service-card img {
+    max-height: 160px;
+  }
+}
+
+/* ====== CÁC PHẦN KHÁC ====== */
+@media (max-width: 600px) {
+  .calendar-card {
+    padding: 20px;
+    margin: 20px auto;
+  }
+  #bookBtn {
+    width: 100%;
+    max-width: 280px;
+  }
+}
