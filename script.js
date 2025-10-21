@@ -1,4 +1,4 @@
-// script.js - shared functionality for FLOP' Studio
+// ================= FLOP' Studio Shared Script =================
 document.addEventListener('DOMContentLoaded', () => {
   // ========== NAV ACTIVE ==========
   const links = document.querySelectorAll('.nav-links a');
@@ -7,10 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ========== MOBILE NAV TOGGLE ==========
-  const menuBtn = document.getElementById('menuToggle');
-  if (menuBtn) {
-    const nav = document.querySelector('.nav-links');
-    menuBtn.addEventListener('click', () => nav.classList.toggle('open'));
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      menuToggle.classList.toggle('active');
+    });
   }
 
   // ========== CONTACT FORM SUBMIT ==========
@@ -26,14 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = await fetch('send_email.php', { method: 'POST', body: data });
         const json = await res.json();
         if (json.success) {
-          alert('Gửi thành công — chúng tôi sẽ liên hệ bạn sớm!');
+          alert('✅ Gửi thành công — chúng tôi sẽ liên hệ bạn sớm!');
           contactForm.reset();
         } else {
-          alert('Gửi không thành công: ' + (json.message || 'Lỗi máy chủ'));
+          alert('❌ Gửi không thành công: ' + (json.message || 'Lỗi máy chủ'));
         }
       } catch (err) {
         console.error(err);
-        alert('Lỗi kết nối. Vui lòng thử lại sau.');
+        alert('⚠️ Lỗi kết nối. Vui lòng thử lại sau.');
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Gửi';
@@ -56,13 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`;
     const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${body}`;
 
+    // Ưu tiên mở trong Gmail nếu có (Android/Chrome)
     if (navigator.userAgent.includes("Android") || navigator.userAgent.includes("Chrome")) {
       window.open(gmailUrl, "_blank");
     } else {
       window.location.href = mailtoUrl;
     }
-
-    return false;
   };
 
   // ========== GÓI CHỤP (gia.html) ==========
@@ -95,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedPackage = null;
     let selectedDates = [];
 
-    // Khởi tạo Flatpickr (lịch)
+    // ========== LỊCH CHỤP ==========
+    flatpickr.localize(flatpickr.l10ns.vn); // Kích hoạt tiếng Việt
     const fp = flatpickr("#calendar", {
       inline: true,
       mode: "multiple",
@@ -109,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // DOM elements
+    // ========== DOM Elements ==========
     const serviceCards = document.querySelectorAll(".service-card");
     const packageList = document.getElementById("packageList");
     const packageTitle = document.getElementById("packageTitle");
@@ -118,8 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const bookBtn = document.getElementById("bookBtn");
     const modal = document.getElementById("messageModal");
     const modalMessage = document.getElementById("modalMessage");
+    const copyBtn = document.getElementById("copyBtn");
+    const closeBtn = document.getElementById("closeModal");
 
-    // Khi chọn dịch vụ
+    // ========== CHỌN DỊCH VỤ ==========
     serviceCards.forEach(card => {
       card.addEventListener("click", () => {
         serviceCards.forEach(c => c.classList.remove("active"));
@@ -133,7 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
         bookingPanel.style.display = "flex";
         packageTitle.textContent = `Các gói ${card.querySelector("h3").textContent}`;
         packageList.innerHTML = servicePackages[selectedService].map(
-          p => `<div class="package" data-name="${p.name}"><strong>${p.name}</strong><br><small>${p.price}</small></div>`
+          p => `<div class="package" data-name="${p.name}">
+                  <strong>${p.name}</strong><br><small>${p.price}</small>
+                </div>`
         ).join("");
 
         document.querySelectorAll(".package").forEach(pkg => {
@@ -147,15 +154,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // Cập nhật trạng thái nút
+    // ========== CẬP NHẬT TRẠNG THÁI NÚT ==========
     function updateBookState() {
       bookBtn.disabled = !(selectedPackage && selectedDates.length);
     }
 
-    // Khi bấm Đặt lịch
+    // ========== NÚT ĐẶT LỊCH ==========
     bookBtn.addEventListener("click", () => {
       const channel = document.querySelector('input[name="channel"]:checked').value;
-      const message = 
+      const message =
 `Xin chào FLOP' Studio! 👋
 
 Mình muốn đặt lịch chụp:
@@ -172,36 +179,19 @@ Cảm ơn Studio rất nhiều! 💫`;
         window.open(`https://zalo.me/${ZALO_PHONE}?text=${encodedMsg}`, "_blank");
       }
 
-      // Hiện modal xem lại nội dung
       modal.style.display = "block";
       modalMessage.textContent = message;
 
       setTimeout(() => {
         alert("✅ Đang mở ứng dụng chat của bạn.\nNếu không tự mở, hãy kiểm tra popup bị chặn hoặc bấm lại nút 'Đặt lịch'.");
-      }, 1200);
+      }, 1000);
     });
 
-    // Nút copy tin nhắn
-    const copyBtn = document.getElementById("copyBtn");
-    const closeBtn = document.getElementById("closeModal");
-    if (copyBtn) {
-      copyBtn.addEventListener("click", () => {
-        navigator.clipboard.writeText(modalMessage.textContent);
-        alert("Đã sao chép tin nhắn!");
-      });
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener("click", () => modal.style.display = "none");
-    }
-  }
-});
-document.addEventListener('DOMContentLoaded', ()=>{
-  const menuToggle = document.getElementById('menuToggle');
-  const navLinks = document.querySelector('.nav-links');
-
-  if(menuToggle && navLinks){
-    menuToggle.addEventListener('click', ()=>{
-      navLinks.classList.toggle('open');
+    // ========== COPY & CLOSE MODAL ==========
+    if (copyBtn) copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(modalMessage.textContent);
+      alert("📋 Đã sao chép tin nhắn!");
     });
+    if (closeBtn) closeBtn.addEventListener("click", () => modal.style.display = "none");
   }
 });
