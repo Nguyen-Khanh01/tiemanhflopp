@@ -126,33 +126,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== CHỌN DỊCH VỤ ==========
     serviceCards.forEach(card => {
-      card.addEventListener("click", () => {
-        serviceCards.forEach(c => c.classList.remove("active"));
-        card.classList.add("active");
-        selectedService = card.dataset.service;
-        selectedPackage = null;
-        selectedDates = JSON.parse(localStorage.getItem(`dates_${selectedService}`)) || [];
-        fp.setDate(selectedDates, false);
+  card.addEventListener("click", () => {
+    serviceCards.forEach(c => {
+      c.classList.remove("active");
+      const oldInline = c.querySelector(".package-inline");
+      if (oldInline) oldInline.remove();
+    });
+    card.classList.add("active");
 
-        calendarSection.style.display = "block";
-        bookingPanel.style.display = "flex";
-        packageTitle.textContent = `Các gói ${card.querySelector("h3").textContent}`;
-        packageList.innerHTML = servicePackages[selectedService].map(
-          p => `<div class="package" data-name="${p.name}">
-                  <strong>${p.name}</strong><br><small>${p.price}</small>
-                </div>`
-        ).join("");
+    selectedService = card.dataset.service;
+    selectedPackage = null;
+    selectedDates = JSON.parse(localStorage.getItem(`dates_${selectedService}`)) || [];
+    fp.setDate(selectedDates, false);
+    updateBookState();
 
-        document.querySelectorAll(".package").forEach(pkg => {
-          pkg.addEventListener("click", () => {
-            document.querySelectorAll(".package").forEach(x => x.classList.remove("selected"));
-            pkg.classList.add("selected");
-            selectedPackage = pkg.dataset.name;
-            updateBookState();
-          });
+    // Nếu là mobile, chèn gói ngay bên dưới ảnh
+    if (window.innerWidth <= 768) {
+      const packageHTML = `
+        <div class="package-inline">
+          ${servicePackages[selectedService].map(
+            p => `<div class="package" data-name="${p.name}">
+                    <div class="package-title">${p.name}</div>
+                    <div class="package-price">${p.price}</div>
+                  </div>`
+          ).join("")}
+        </div>`;
+      card.insertAdjacentHTML("beforeend", packageHTML);
+
+      card.querySelectorAll(".package").forEach(pkg => {
+        pkg.addEventListener("click", () => {
+          card.querySelectorAll(".package").forEach(x => x.classList.remove("selected"));
+          pkg.classList.add("selected");
+          selectedPackage = pkg.dataset.name;
+          updateBookState();
         });
       });
-    });
+    } else {
+      // Giao diện desktop: hiển thị phần gói bên dưới như cũ
+      calendarSection.style.display = "block";
+      bookingPanel.style.display = "flex";
+      packageTitle.textContent = `Các gói ${card.querySelector("h3").textContent}`;
+      packageList.innerHTML = servicePackages[selectedService].map(
+        p => `<div class="package" data-name="${p.name}">
+                <div class="package-title">${p.name}</div>
+                <div class="package-price">${p.price}</div>
+              </div>`
+      ).join("");
+    }
+  });
+});
+
 
     // ========== CẬP NHẬT TRẠNG THÁI NÚT ==========
     function updateBookState() {
