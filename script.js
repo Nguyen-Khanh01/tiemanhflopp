@@ -218,3 +218,14 @@ Cảm ơn Studio rất nhiều! 💫`;
     if (closeBtn) closeBtn.addEventListener("click", () => modal.style.display = "none");
   }
 });
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.querySelector('.nav-links');
+  if(menuToggle && navLinks){
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+  }
+});
+</script>
