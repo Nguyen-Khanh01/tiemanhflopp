@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liên hệ | FLOP' Studio</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="header">
+    <nav>
+      <h1 class="logo">📸 FLOP' Studio</h1>
+      <ul class="nav-links">
+        <li><a href="index.html">Trang Chủ</a></li>
+        <li><a href="about.html">Giới Thiệu</a></li>
+        <li><a href="gia.html">Gói Chụp</a></li>
+        <li><a href="contact.html" class="active">Liên Hệ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- CONTACT SECTION -->
+  <section class="contact-page" style="margin-top:100px; padding:60px 20px; max-width:1000px; margin:auto;">
+    <h2 style="text-align:center; font-family:'Playfair Display',serif; margin-bottom:20px;">Liên hệ với FLOP' Studio</h2>
+    <p style="text-align:center; color:#555; margin-bottom:40px;">Hãy để lại lời nhắn — chúng tôi sẽ phản hồi nhanh nhất 💌</p>
+
+    <form id="contact-form" onsubmit="return sendEmail(event)" style="display:flex;flex-direction:column;gap:15px;max-width:500px;margin:auto;">
+      <input type="text" id="name" placeholder="Họ và tên" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <textarea id="message" rows="5" placeholder="Nội dung tin nhắn..." required></textarea>
+      <button type="submit" style="background:#000;color:#fff;border:none;padding:12px;cursor:pointer;font-weight:600;">Gửi qua Gmail ✉️</button>
+    </form>
+
+<div class="contact-links">
+  <a href="https://m.me/Iuqanh" target="_blank" class="contact-icon fb" title="Facebook Messenger">
+    <i class="fab fa-facebook-messenger"></i>
+  </a>
+  <a href="https://zalo.me/0383070200" target="_blank" class="contact-icon zalo" title="Zalo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
+  </a>
+  <a href="mailto:nguyenduykhanh200339@gmail.com" class="contact-icon mail" title="Gmail">
+    <i class="far fa-envelope"></i>
+  </a>
+  <a href="tel:0383070200" class="contact-icon phone" title="Gọi điện">
+    <i class="fas fa-phone"></i>
+  </a>
+</div>
+
+
+    <div class="map-container" style="margin-top:50px;">
+      <iframe 
+        src="https://www.google.com/maps?q=Quảng+Yên,+Quảng+Ninh,+Việt+Nam&output=embed"
+        width="100%" height="400" style="border:0;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);" allowfullscreen="" loading="lazy">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="text-align:center; padding:20px; background:#fafafa; border-top:1px solid #ddd; margin-top:60px;">
+    © 2025 FLOP' Studio | Hân hạnh đồng hành cùng bạn 💫
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+  function sendEmail(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    if (!name || !email || !message) {
+      alert("Vui lòng điền đầy đủ thông tin.");
+      return false;
+    }
+
+    const recipient = "flopstudio@gmail.com";
+    const subject = encodeURIComponent("Liên hệ từ khách hàng FLOP' Studio");
+    const body = encodeURIComponent(`Tên: ${name}\nEmail: ${email}\n\nNội dung:\n${message}`);
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`;
+    const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${body}`;
+
+    // Mở Gmail nếu có, nếu không thì mailto
+    if (navigator.userAgent.includes("Android") || navigator.userAgent.includes("Chrome")) {
+      window.open(gmailUrl, "_blank");
+    } else {
+      window.location.href = mailtoUrl;
+    }
+
+    return false;
+  }
+  </script>
+
+</body>
+</html>
