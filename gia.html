@@ -4,380 +4,225 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gói Chụp | FLOP' Studio</title>
-  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
+  <!-- Flatpickr -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_green.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vn.js"></script>
 
   <style>
-    body { font-family:'Poppins', sans-serif; color:#222; background:#fff; }
+    body { font-family:'Poppins', sans-serif; color:#222; background:#fff; margin:0; }
 
+    /* ===== HEADER ===== */
     header#header {
       position: fixed; top: 0; left: 0; right: 0;
       background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(6px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      z-index: 40;
+      z-index: 100;
     }
     nav {
       max-width: 1100px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 24px;
     }
-    .logo { font-weight: 700; font-family: "Playfair Display", serif; font-size: 1.25rem; }
-    .nav-links { display: flex; gap: 18px; list-style: none; }
+    .logo a { text-decoration: none; color:#111; font-weight:700; font-family:"Playfair Display",serif; font-size:1.25rem; }
+
+    .nav-links { display: flex; gap: 18px; list-style: none; transition: all 0.3s ease; }
     .nav-links a { text-decoration: none; color: #6b6b6b; font-weight: 600; padding: 8px 10px; border-radius: 8px; transition: 0.25s; }
     .nav-links a:hover, .nav-links a.active { color: #00bfa5; background: rgba(0,0,0,0.03); }
 
-    .services-header { margin-top: 90px; text-align: center; padding: 36px 20px 6px; }
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
 
+    @media (max-width: 850px) {
+      .menu-toggle { display: block; color:#111; }
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #fff;
+        flex-direction: column;
+        width: 220px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        display: none;
+        padding: 10px 0;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { color:#333; padding:10px 18px; width:100%; text-align:right; }
+    }
+
+    /* ===== DỊCH VỤ ===== */
+    .services-header { margin-top:90px; text-align:center; padding:36px 20px 6px; }
     .service-list {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      justify-items: center;
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:20px;
+      justify-items:center;
     }
     .service-card {
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-      border: 2px solid transparent;
-      transition: all 0.35s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 280px;
-      text-align: center;
-      padding: 12px 10px 18px;
-    }
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
-    }
-    .service-card.active {
-      border-color: #00bfa5;
-      box-shadow: 0 18px 40px rgba(0, 191, 165, 0.3);
+      background:#fff; border-radius:16px; overflow:hidden; cursor:pointer;
+      box-shadow:0 10px 30px rgba(0,0,0,0.06);
+      border:2px solid transparent;
+      transition:all 0.35s ease;
+      display:flex; flex-direction:column; align-items:center;
+      padding:12px 10px 18px;
+      text-align:center;
+      position:relative;
     }
     .service-card img {
-      width: 100%;
-      height: auto;
-      max-height: 220px;
-      object-fit: contain;
-      background-color: #f9f9f9;
-      border-radius: 12px;
-      display: block;
-      margin: 0 auto 10px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width:100%; height:auto; max-height:220px; object-fit:contain;
+      border-radius:12px; background:#f9f9f9;
     }
-    .service-card:hover img {
-      transform: scale(1.05);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.15);
+    .service-card.active { border-color:#00bfa5; box-shadow:0 18px 40px rgba(0,191,165,0.3); }
+    .service-card h3 { margin-top:10px; font-weight:600; }
+    .service-price {
+      margin-top:6px; font-size:0.95rem; color:#00bfa5; font-weight:600;
+      display:none;
     }
-    .service-card h3 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-      margin-top: 6px;
-      color: #222;
-      transition: color 0.3s ease;
-    }
-    .service-card.active h3,
-    .service-card:hover h3 {
-      color: #00bfa5;
-    }
+    .service-card.active .service-price { display:block; }
 
+    /* ===== PACKAGES ===== */
     .package-area {
-      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
+      display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-top:20px;
     }
     .package {
-      background: #fff;
-      border-radius: 14px;
-      padding: 16px 18px;
-      min-width: 200px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-      border: 2px solid transparent;
-      transition: all 0.25s ease;
-      text-align: center;
-      cursor: pointer;
+      background:#fff; border-radius:14px; padding:16px 18px; min-width:200px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
+      text-align:center; border:2px solid transparent; transition:all 0.25s ease; cursor:pointer;
     }
-    .package:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
-    }
-    .package.selected {
-      border-color: #00bfa5;
-    }
-    .package-title {
-      color: #00bfa5;
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-    .package-desc {
-      color: #666;
-      font-size: 0.88rem;
-      font-weight: 400;
-      text-transform: none;
-      margin-bottom: 6px;
-    }
-    .package-price {
-      font-weight: 600;
-      color: #111;
-      font-size: 0.95rem;
-    }
+    .package:hover { transform:translateY(-4px); box-shadow:0 12px 28px rgba(0,0,0,0.1); }
+    .package.selected { border-color:#00bfa5; }
+    .package-title { color:#00bfa5; font-weight:700; font-size:1rem; margin-bottom:4px; }
 
+    /* ===== LỊCH CHỤP ===== */
     .calendar-card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-      padding: 30px;
-      max-width: 380px;
-      margin: 40px auto;
-      text-align: center;
-      border: 1px solid rgba(0,0,0,0.05);
-      transition: transform 0.3s ease;
+      background:#fff; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,0.08);
+      padding:30px; max-width:380px; margin:40px auto; text-align:center;
     }
-    .calendar-card:hover { transform: translateY(-3px); }
 
-    .flatpickr-calendar {
-      font-family: 'Poppins', sans-serif !important;
-      border-radius: 16px !important;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-      border: none !important;
-    }
-    .flatpickr-months { background: linear-gradient(135deg, #00bfa5, #009688); color: #fff; }
-
+    /* ===== BOOKING PANEL ===== */
     .booking-panel {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      margin-top: 16px;
-      flex-wrap: wrap;
+      display:flex; align-items:center; justify-content:center;
+      gap:16px; flex-wrap:wrap; margin-top:20px;
     }
-
-    .channel-choice {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 0.95rem;
-      color: #444;
-    }
-
-    .channel-choice label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .channel-choice label:hover {
-      color: #00bfa5;
-    }
-
+    .channel-choice { display:flex; gap:10px; align-items:center; }
     #bookBtn {
-      background: linear-gradient(135deg, #00bfa5, #009688);
-      color: #fff;
-      border: none;
-      padding: 12px 28px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 8px 18px rgba(0, 191, 165, 0.25);
+      background:linear-gradient(135deg,#00bfa5,#009688);
+      color:#fff; border:none; padding:12px 26px; border-radius:10px;
+      font-weight:600; cursor:pointer; transition:all 0.25s ease;
+      box-shadow:0 8px 18px rgba(0,191,165,0.25);
+    }
+    #bookBtn:hover { transform:translateY(-2px); background:linear-gradient(135deg,#009688,#00bfa5); }
+    #bookBtn:disabled { background:#ccc; cursor:not-allowed; }
+
+    @media (max-width: 600px) {
+      .service-price { display:block; }
+      .booking-panel { flex-direction:column; gap:12px; }
+      #bookBtn { width:90%; }
     }
 
-    #bookBtn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(0, 191, 165, 0.35);
-      background: linear-gradient(135deg, #009688, #00bfa5);
-    }
-
-    #bookBtn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    footer { text-align:center;padding:20px;background:#fafafa; }
+    footer { text-align:center; padding:20px; background:#fafafa; margin-top:50px; }
   </style>
 </head>
 <body>
 
- <header id="header">
+<header id="header">
   <nav>
-    <div class="logo"><div class="logo"><a href="index.html">TIỆM ẢNH FLOP'</a></div>
+    <div class="logo"><a href="index.html">📸 FLOP' Studio</a></div>
     <button id="menuToggle" class="menu-toggle">☰</button>
     <ul class="nav-links">
       <li><a href="index.html">Trang Chủ</a></li>
       <li><a href="about.html">Giới Thiệu</a></li>
-      <li><a href="gia.html">Gói Chụp</a></li>
+      <li><a href="gia.html" class="active">Gói Chụp</a></li>
       <li><a href="contact.html">Liên hệ</a></li>
     </ul>
   </nav>
 </header>
 
-  <main style="padding:40px 20px;">
-    <section class="services-header">
-      <h2 style="font-family:'Playfair Display',serif;">Gói chụp của chúng tôi</h2>
-      <p class="small-muted">Chọn dịch vụ, chọn gói — đặt lịch nhanh qua Messenger hoặc Zalo</p>
-    </section>
+<main style="padding:40px 20px;">
+  <section class="services-header">
+    <h2 style="font-family:'Playfair Display',serif;">Gói chụp của chúng tôi</h2>
+    <p>Chọn dịch vụ, chọn gói — đặt lịch nhanh qua Messenger hoặc Zalo</p>
+  </section>
 
-    <div class="service-list" id="serviceList">
-      <div class="service-card" data-service="beauty"><img src="assets/beauty.jpg"><h3>Gia Đình</h3></div>
-      <div class="service-card" data-service="wedding"><img src="assets/6.jpg"><h3>Phóng sự cưới</h3></div>
-      <div class="service-card" data-service="yearbook"><img src="assets/8.jpg"><h3>Kỷ yếu</h3></div>
-      <div class="service-card" data-service="concept"><img src="assets/NDK06509.jpg"><h3>Concept</h3></div>
-    </div>
+  <div class="service-list" id="serviceList">
+    <div class="service-card" data-service="beauty"><img src="assets/beauty.jpg"><h3>Gia Đình</h3><div class="service-price"></div></div>
+    <div class="service-card" data-service="wedding"><img src="assets/6.jpg"><h3>Phóng sự cưới</h3><div class="service-price"></div></div>
+    <div class="service-card" data-service="yearbook"><img src="assets/8.jpg"><h3>Kỷ yếu</h3><div class="service-price"></div></div>
+    <div class="service-card" data-service="concept"><img src="assets/NDK06509.jpg"><h3>Concept</h3><div class="service-price"></div></div>
+  </div>
 
-    <div id="packagesContainer" style="margin-top:40px; text-align:center;">
-      <h3 id="packageTitle" class="small-muted">Chọn một dịch vụ để xem gói chụp</h3>
-      <div class="package-area" id="packageList"></div>
-
-      <div id="calendarSection" style="display:none;">
-        <div class="calendar-card">
-          <h3>Lịch chụp</h3>
-          <p>Hãy chọn một hoặc nhiều ngày bạn muốn chụp — FLOP’ Studio sẽ xác nhận sớm nhất 💫</p>
-          <div id="calendar"></div>
-        </div>
-      </div>
-
-      <div class="booking-panel" id="bookingPanel" style="display:none;">
-        <div class="channel-choice">
-          <label><input type="radio" name="channel" value="messenger" checked> Messenger</label>
-          <label><input type="radio" name="channel" value="zalo"> Zalo</label>
-        </div>
-        <button id="bookBtn" disabled>Đặt lịch 📅</button>
-      </div>
-    </div>
-  </main>
-
-  <footer>© 2025 FLOP' Studio</footer>
-
-  <div id="messageModal" style="display:none;">
-    <div class="modal-backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:1000;">
-      <div class="modal" style="background:#fff;padding:20px;border-radius:12px;max-width:700px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
-        <h3>Tin nhắn đã soạn sẵn</h3>
-        <pre id="modalMessage" style="background:#f6f6f6;padding:10px;border-radius:8px;white-space:pre-wrap;"></pre>
-        <button id="copyBtn">Sao chép</button>
-        <button id="closeModal">Đóng</button>
-      </div>
+  <div id="calendarSection" style="display:none;">
+    <div class="calendar-card">
+      <h3>Lịch chụp</h3>
+      <p>Chọn ngày bạn muốn chụp — FLOP’ Studio sẽ xác nhận sớm nhất 💫</p>
+      <div id="calendar"></div>
     </div>
   </div>
 
-  <script>
-    flatpickr.localize(flatpickr.l10ns.vn); 
+  <div class="booking-panel" id="bookingPanel" style="display:none;">
+    <div class="channel-choice">
+      <label><input type="radio" name="channel" value="messenger" checked> Messenger</label>
+      <label><input type="radio" name="channel" value="zalo"> Zalo</label>
+    </div>
+    <button id="bookBtn" disabled>Đặt lịch 📅</button>
+  </div>
+</main>
 
-   const servicePackages = {
-      beauty: [
-        { name: 'Gói Cơ bản', price: '2.000.000đ' },
-        { name: 'Gói Nâng cao', price: '3.000.000đ' }
-      ],
-      wedding: [
-        { name: 'Gói Tiêu chuẩn<br> 1 Thợ Chụp', price: '1.400.000đ' },
-        { name: 'Gói Photobooth Cơ Bản<br>200 tấm ảnh<br>Thời Gian 1.5 Giờ', price: '2.500.000đ' },
-        { name: 'Gói Photobooth Nâng Cao<br>Không giới hạn ảnh<br>Thời Gian 2.5 Giờ', price: '3.500.000đ' },
-        { name: 'Gói Photobooth Premium<br>Không giới hạn ảnh<br>Thời Gian 3.5 Giờ', price: '4.200.000đ' },
-        { name: 'Gói Photobooth Sự Kiện<br>Không giới hạn ảnh<br>Thời Gian 4.5 Giờ', price: '5.000.000đ' },
+<footer>© 2025 FLOP' Studio</footer>
 
-      ],
-      yearbook: [
-        { name: 'Gói Cơ Bản ( Nửa Ngày)<br>2 Thợ Chụp<br>Gồm 2 Trang Phục', price: '250k/Học Sinh' },
-        { name: 'Gói Nâng Cao ( Sáng + Chiều)<br>3 Thợ Chụp<br>Gồm 3 Trang Phục<br>(lưu ý)Máy Photobooth mỗi Học Sinh Cộng Thêm 70K', price: '430k/Học Sinh' },
-        { name: 'Gói Premium ( Cả Ngày)<br>3 Thợ Chụp<br>Gồm 3 Trang Phục<br>(lưu ý)Máy Photobooth mỗi Học Sinh Cộng Thêm 70K', price: '530k/Học Sinh' },
+<script>
+flatpickr.localize(flatpickr.l10ns.vn);
 
-      ],
-      concept: [
-        { name: 'Gói Đơn Áo Dài<br>chỉ chụp không có trang phục và makeup', price: '500.000đ' },
-        { name: 'Gói Nâng Cao Áo Dài<br>Bao Gồm trang phục và makeup', price: '1.000.000đ' },
-        { name: 'Beauty<br>Bao Gồm trang phục và makeup', price: '1.200.000đ' },
-        { name: 'ConCept Theo Ý ', price: 'Liên Hệ' },
-      ]
-    };
+const servicePackages = {
+  beauty: [{name:'Gói Cơ bản',price:'2.000.000đ'},{name:'Gói Nâng cao',price:'3.000.000đ'}],
+  wedding: [{name:'Gói Tiêu chuẩn',price:'1.400.000đ'},{name:'Gói Premium',price:'3.500.000đ'}],
+  yearbook: [{name:'Gói Lớp Nhỏ',price:'4.000.000đ'},{name:'Gói Lớp Lớn',price:'6.000.000đ'}],
+  concept: [{name:'Gói Đơn',price:'2.500.000đ'},{name:'Gói Đôi',price:'3.500.000đ'}]
+};
+const FB_PAGE = "Iuqanh", ZALO_PHONE = "0383070200";
+let selectedService=null, selectedPackage=null, selectedDates=[];
 
-    const FB_PAGE = "Iuqanh";
-    const ZALO_PHONE = "0383070200";
-    let selectedService = null, selectedPackage = null, selectedDates = [];
+const fp=flatpickr("#calendar",{inline:true,mode:"multiple",dateFormat:"d/m/Y",onChange:(dates,_,i)=>{selectedDates=dates.map(d=>i.formatDate(d,"d/m/Y"));updateBookState();}});
+const serviceCards=document.querySelectorAll('.service-card');
+const calendarSection=document.getElementById('calendarSection');
+const bookingPanel=document.getElementById('bookingPanel');
+const bookBtn=document.getElementById('bookBtn');
 
-    const fp = flatpickr("#calendar", {
-      inline: true,
-      mode: "multiple",
-      dateFormat: "d/m/Y",
-      locale: "vn",
-      onChange(dates, _, instance) {
-        selectedDates = dates.map(d => instance.formatDate(d, "d/m/Y"));
-        localStorage.setItem(`dates_${selectedService}`, JSON.stringify(selectedDates));
-        updateBookState();
-      }
-    });
+serviceCards.forEach(card=>{
+  card.addEventListener('click',()=>{
+    serviceCards.forEach(c=>c.classList.remove('active'));
+    card.classList.add('active');
+    selectedService=card.dataset.service;
+    const firstPrice=servicePackages[selectedService][0].price;
+    card.querySelector('.service-price').textContent='Giá từ '+firstPrice;
+    calendarSection.style.display='block';
+    bookingPanel.style.display='flex';
+    selectedPackage=servicePackages[selectedService][0].name;
+    updateBookState();
+  });
+});
 
-    const serviceCards = document.querySelectorAll('.service-card');
-    const packageList = document.getElementById('packageList');
-    const packageTitle = document.getElementById('packageTitle');
-    const calendarSection = document.getElementById('calendarSection');
-    const bookingPanel = document.getElementById('bookingPanel');
-    const bookBtn = document.getElementById('bookBtn');
-    const modal = document.getElementById('messageModal');
-    const modalMessage = document.getElementById('modalMessage');
+function updateBookState(){ bookBtn.disabled=!(selectedPackage&&selectedDates.length); }
 
-    serviceCards.forEach(card => {
-      card.addEventListener('click', () => {
-        serviceCards.forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        selectedService = card.dataset.service;
-        selectedPackage = null;
-        selectedDates = JSON.parse(localStorage.getItem(`dates_${selectedService}`)) || [];
-        fp.setDate(selectedDates, false);
-        calendarSection.style.display = 'block';
-        bookingPanel.style.display = 'flex';
-        packageTitle.textContent = `Các gói ${card.querySelector('h3').textContent}`;
-        packageList.innerHTML = servicePackages[selectedService].map(p =>
-          `<div class="package" data-name="${p.name.split('<br>')[0]}">
-             <div class="package-title">${p.name.split('<br>')[0]}</div>
-             <div class="package-desc">${p.name.split('<br>').slice(1).join('<br>')}</div>
-             <div class="package-price">${p.price}</div>
-           </div>`
-        ).join('');
-        document.querySelectorAll('.package').forEach(pkg => {
-          pkg.addEventListener('click', () => {
-            document.querySelectorAll('.package').forEach(x => x.classList.remove('selected'));
-            pkg.classList.add('selected');
-            selectedPackage = pkg.dataset.name;
-            updateBookState();
-          });
-        });
-      });
-    });
+bookBtn.addEventListener('click',()=>{
+  const channel=document.querySelector('input[name="channel"]:checked').value;
+  const message=`Xin chào FLOP' Studio!\n\nMình muốn đặt lịch chụp ${selectedPackage} (${selectedService.toUpperCase()}) vào ngày ${selectedDates.join(", ")}.\n\nCảm ơn!`;
+  if(channel==="messenger")window.open(`https://m.me/${FB_PAGE}`,"_blank");
+  else window.open(`https://zalo.me/${ZALO_PHONE}`,"_blank");
+  alert("Tin nhắn mẫu đã được mở. Bạn có thể dán nội dung sau:\n\n"+message);
+});
 
-    function updateBookState() {
-      bookBtn.disabled = !(selectedPackage && selectedDates.length);
-    }
-
-    bookBtn.addEventListener('click', () => {
-      const channel = document.querySelector('input[name="channel"]:checked').value;
-      const message = `Xin chào FLOP' Studio!\n\nMình muốn đặt lịch chụp ${selectedPackage} (${selectedService.toUpperCase()}) vào ngày ${selectedDates.join(", ")}.\n\nCảm ơn!`;
-      if(channel === "messenger") window.open(`https://m.me/${FB_PAGE}`, "_blank");
-      else window.open(`https://zalo.me/${ZALO_PHONE}`, "_blank");
-      modal.style.display = "block";
-      modalMessage.textContent = message;
-    });
-
-    document.getElementById('copyBtn').onclick = () => {
-      navigator.clipboard.writeText(modalMessage.textContent);
-      alert("Đã sao chép tin nhắn!");
-    };
-    document.getElementById('closeModal').onclick = () => modal.style.display = "none";
-  </script>
+document.getElementById('menuToggle').onclick=()=>document.querySelector('.nav-links').classList.toggle('open');
+</script>
 </body>
 </html>
